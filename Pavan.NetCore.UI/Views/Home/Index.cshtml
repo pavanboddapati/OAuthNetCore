@@ -4,5 +4,13 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>List of Applications</p>
+    <div class="row">
+        <ul>
+            @foreach (var appName in Model)
+            {
+                <li>@appName</li>
+            }
+        </ul>
+    </div>
 </div>

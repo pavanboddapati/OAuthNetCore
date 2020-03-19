@@ -7,21 +7,25 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Pavan.NetCore.UI.Models;
+using Pavan.NetCore.UI.Services;
 
 namespace Pavan.NetCore.UI.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IApplicationService appService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IApplicationService appService)
         {
             _logger = logger;
+            this.appService = appService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var appNames = await appService.GetApplicationNames();
+            return View(appNames);
         }
 
         public IActionResult Privacy()

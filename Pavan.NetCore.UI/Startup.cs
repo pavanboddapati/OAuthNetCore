@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using Pavan.NetCore.UI.Models;
+using Pavan.NetCore.UI.Services;
 
 namespace Pavan.NetCore.UI
 {
@@ -36,7 +38,7 @@ namespace Pavan.NetCore.UI
             .AddOpenIdConnect(options =>
             {
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.Authority = Configuration["OktaSSO:OktaDomain"] + "oauth2/default";
+                options.Authority = Configuration["OktaSSO:OktaDomain"] + "oauth2/aus489thehnR7Hi6O4x6";
                 options.RequireHttpsMetadata = true;
                 options.ClientId = Configuration["OktaSSO:ClientId"];
                 options.ClientSecret = Configuration["OktaSSO:ClientSecret"];
@@ -53,6 +55,9 @@ namespace Pavan.NetCore.UI
                 };
             });
             services.AddAuthorization();
+            services.Configure<OktaApiClient>(Configuration.GetSection("OktaApiClient"));
+            services.AddSingleton<ITokenService,OktaTokenService>();
+            services.AddTransient<IApplicationService, ApplicationService>();
             services.AddControllersWithViews();
         }
 

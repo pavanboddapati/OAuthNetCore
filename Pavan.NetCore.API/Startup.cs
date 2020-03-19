@@ -31,10 +31,11 @@ namespace Pavan.NetCore.API
             })
             .AddJwtBearer(options =>
             {
-                options.Authority = Configuration["OktaSSO:OktaDomain"] + "oauth2/default";
-                options.Audience = "api://default";
-                options.RequireHttpsMetadata = true;
-            });                
+                options.Authority = Configuration["OktaSSO:OktaDomain"] + "oauth2/aus489thehnR7Hi6O4x6";
+                options.Audience = "api://aram";
+                options.RequireHttpsMetadata = false;
+            });
+            services.AddAuthorization();
                 
             services.AddControllers();
             services.AddSwaggerGen(api => {
@@ -51,14 +52,13 @@ namespace Pavan.NetCore.API
             }
 
             app.UseHttpsRedirection();
-            app.UseAuthentication();
             app.UseSwagger();
             app.UseSwaggerUI(ui => {
                 ui.SwaggerEndpoint("/swagger/v1/swagger.json", "Pavan OAuth API");
             });
-
+            app.UseAuthentication();
             app.UseRouting();
-            
+            app.UseAuthorization();
             app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
