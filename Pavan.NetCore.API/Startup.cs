@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Pavan.NetCore.Api.Models;
+using Pavan.NetCore.Api.Services;
 
 namespace Pavan.NetCore.API
 {
@@ -35,6 +37,8 @@ namespace Pavan.NetCore.API
                 options.Audience = "api://aram";
                 options.RequireHttpsMetadata = false;
             });
+            services.Configure<LDAPConfig>(Configuration.GetSection("LDAPConfig"));
+            services.AddSingleton<ILDAPService, LDAPService>();
             services.AddAuthorization();
                 
             services.AddControllers();

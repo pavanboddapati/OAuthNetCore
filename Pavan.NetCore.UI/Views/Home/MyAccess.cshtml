@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "My Access Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">My Access Page - With User Access Token</h1>
+    <p>List of Members in Given Group</p>
+    <div class="row">
+        <ul>
+            @foreach (var memberName in Model)
+            {
+                <li>@memberName</li>
+            }
+        </ul>
+    </div>
+</div>

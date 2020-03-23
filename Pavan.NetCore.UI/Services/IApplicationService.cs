@@ -9,7 +9,7 @@ namespace Pavan.NetCore.UI.Services
 {
     public interface IApplicationService
     {
-        Task<IList<string>> GetApplicationNames();
+        Task<IList<string>> GetApplicationNames(string token="");
     }
 
     public class ApplicationService : IApplicationService
@@ -20,21 +20,22 @@ namespace Pavan.NetCore.UI.Services
         {
             this.tokenService = tokenService;
         }
-        public async Task<IList<string>> GetApplicationNames()
+        public async Task<IList<string>> GetApplicationNames(string token = "")
         {
             var applicationNames = new List<string>();
-            var token = await this.tokenService.GetToken();
+            if (string.IsNullOrEmpty(token))
+                token = await this.tokenService.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.GetAsync("https://localhost:44302/api/Application");
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 var json = response.Content.ReadAsStringAsync().Result;
                 applicationNames = JsonSerializer.Deserialize<List<string>>(json);
             }
             else
             {
-                applicationNames = new List<string>{response.StatusCode.ToString(), response.ReasonPhrase};           
+                applicationNames = new List<string> { response.StatusCode.ToString(), response.ReasonPhrase };
             }
             return applicationNames;
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,11 +16,13 @@ namespace Pavan.NetCore.UI.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IApplicationService appService;
+        private readonly ILDAPService ldapService;
 
-        public HomeController(ILogger<HomeController> logger, IApplicationService appService)
+        public HomeController(ILogger<HomeController> logger, IApplicationService appService, ILDAPService ldapService)
         {
             _logger = logger;
             this.appService = appService;
+            this.ldapService = ldapService;
         }
 
         public async Task<IActionResult> Index()
@@ -37,6 +40,14 @@ namespace Pavan.NetCore.UI.Controllers
         public IActionResult Everyone()
         {
             return View();
+        }
+
+        public async Task<IActionResult> MyAccess()
+        {
+            var authInfo = await HttpContext.AuthenticateAsync();
+            var accessToken = authInfo.Properties.GetTokenValue("access_token");
+            var groupMemberNames = await ldapService.GetGroupMembersInGroup(accessToken);
+            return View(groupMemberNames);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

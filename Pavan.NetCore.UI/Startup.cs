@@ -46,6 +46,8 @@ namespace Pavan.NetCore.UI
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
+                options.Scope.Add("access_token");
+                options.Scope.Add("offline_access");
                 options.SaveTokens = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -58,6 +60,7 @@ namespace Pavan.NetCore.UI
             services.Configure<OktaApiClient>(Configuration.GetSection("OktaApiClient"));
             services.AddSingleton<ITokenService,OktaTokenService>();
             services.AddTransient<IApplicationService, ApplicationService>();
+            services.AddTransient<ILDAPService, LDAPService>();
             services.AddControllersWithViews();
         }
 
